@@ -1,15 +1,13 @@
-import { Request, Response, NextFunction } from "express";
-import { User } from "../interface/user.interface";
 const jwt = require("jsonwebtoken");
 
-const authenticateToken = async (req: Request, res: Response, next: NextFunction) => {
+const authenticateToken = async (req, res, next) => {
     const authHeader = req.headers["authorization"];
     const token = authHeader && authHeader.split(" ")[1];
     if (!token) {
         return res.sendStatus(401);
     }
     const accessToken = process.env.ACCESS_TOKEN_SECRET;
-    jwt.verify(token, accessToken, async (err: any, user: User) => {
+    jwt.verify(token, accessToken, async (err, user) => {
         if (err) {
             return res.sendStatus(403);
         }
@@ -18,4 +16,4 @@ const authenticateToken = async (req: Request, res: Response, next: NextFunction
     });
 };
 
-export default authenticateToken;
+module.exports = authenticateToken;
