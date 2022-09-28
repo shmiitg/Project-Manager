@@ -80,11 +80,11 @@
     color: white;
     text-decoration: none;
     border: none;
+    border: 1px solid #005252;
 }
 
 .saveBtn:hover {
     background-color: white;
-    border: 1px solid #005252;
     color: #005252;
 }
 

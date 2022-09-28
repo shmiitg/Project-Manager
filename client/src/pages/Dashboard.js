@@ -40,6 +40,48 @@ const Dashboard = () => {
         setPage(value);
     };
 
+    // get the user's project count to implement pagination
+    const getProjectsCount = async () => {
+        const accessToken = localStorage.getItem("TaskUpToken");
+        if (!accessToken) {
+            setLoggedUser(null);
+            return;
+        }
+        const res = await fetch(`/api/project/count/total`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${accessToken}`,
+            },
+        });
+        const data = await res.json();
+        setProjectCount(data.count);
+        setIsDataLoading(false);
+    };
+
+    // show the most recent projects for the user
+    const getRecentProjects = async () => {
+        const limit = 5;
+        const accessToken = localStorage.getItem("TaskUpToken");
+        if (!accessToken) {
+            setLoggedUser(null);
+            return;
+        }
+        const res = await fetch(`/api/project/recents/${limit}`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${accessToken}`,
+            },
+        });
+        const data = await res.json();
+        if (res.status === 200) {
+            setSideBarProjects(data.projects);
+        } else {
+            toast.error(data.error);
+        }
+    };
+
     // handle the submission of a new project
     const newProjectSubmit = async (e) => {
         e.preventDefault();
@@ -77,32 +119,12 @@ const Dashboard = () => {
             });
             const parsedProjectsData = await dataResult.json();
             setProjectsData(parsedProjectsData.projects);
+            getProjectsCount();
+            getRecentProjects();
         } else {
             toast.error(data.error);
         }
     };
-
-    // get the user's project count to implement pagination
-    useEffect(() => {
-        const fetchProjectCount = async () => {
-            const accessToken = localStorage.getItem("TaskUpToken");
-            if (!accessToken) {
-                setLoggedUser(null);
-                return;
-            }
-            const res = await fetch(`/api/project/count/total`, {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${accessToken}`,
-                },
-            });
-            const data = await res.json();
-            setProjectCount(data.count);
-            setIsDataLoading(false);
-        };
-        fetchProjectCount();
-    }, []);
 
     // get projects based on the selected page
     useEffect(() => {
@@ -129,30 +151,8 @@ const Dashboard = () => {
         fetchProjectData();
     }, [page]);
 
-    // show the most recent projects for the user
     useEffect(() => {
-        const getRecentProjects = async () => {
-            const limit = 5;
-            const accessToken = localStorage.getItem("TaskUpToken");
-            if (!accessToken) {
-                setLoggedUser(null);
-                return;
-            }
-            const res = await fetch(`/api/project/recents/${limit}`, {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${accessToken}`,
-                },
-            });
-            const data = await res.json();
-            if (res.status === 200) {
-                setSideBarProjects(data.projects);
-            } else {
-                toast.error(data.error);
-                setLoggedUser(null);
-            }
-        };
+        getProjectsCount();
         getRecentProjects();
     }, []);
 

@@ -1,7 +1,7 @@
 import { useState, useContext, useEffect } from "react";
 import Navbar from "../components/Navbar";
 import { toast } from "react-toastify";
-import { Redirect, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Loader from "react-loader-spinner";
 import IconImage from "../assets/images/userIcon.png";
 import { UserContext } from "../context/UserContext";
@@ -142,7 +142,7 @@ function UpdateProfile(props) {
                                                 </div>
                                                 <div className="mt-1">
                                                     <Link className="btn btnCancel" to="/profile">
-                                                        Cancel Update
+                                                        Cancel
                                                     </Link>
                                                 </div>
                                             </div>
@@ -175,7 +175,7 @@ function UpdateProfile(props) {
                                                         htmlFor="institutionEditInput"
                                                         className="mb-0"
                                                     >
-                                                        Institution
+                                                        Institute
                                                     </label>
                                                 </div>
                                                 <input
