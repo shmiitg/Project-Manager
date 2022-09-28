@@ -12,16 +12,17 @@ const Landing = () => {
         <div className="pageBody">
             <NavbarH />
             <header className="page-header gradient">
-                <div className="container pt-3">
+                <div className="container pt-5">
                     <div className="row align-items-center justify-content-center">
                         <div className="col-md-5">
                             <h1>Welcome to TaskUp!</h1>
                             <p>A space where you can easily manage all your project tasks.</p>
                         </div>
-                        <div className="col-md-5">
+                        <div className="col-md-5 row justify-content-center">
                             <img
                                 src={CheckIcon}
                                 alt="a man standing before a completed checklist"
+                                style={{ width: "min(500px, 100%)" }}
                             />
                         </div>
                     </div>
@@ -72,7 +73,11 @@ const Landing = () => {
                 <div className="container" role="complementary">
                     <div className="row align-items-center justify-content-center">
                         <div className="col-md-5">
-                            <img src={ComputerWoman} alt="woman working at a computer" />
+                            <img
+                                src={ComputerWoman}
+                                alt="woman working at a computer"
+                                style={{ width: "min(500px, 100%)" }}
+                            />
                         </div>
                         <div className="col-md-5">
                             <h2 className="my-3">What can TaskUp do?</h2>
