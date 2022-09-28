@@ -22,7 +22,7 @@ const Login = () => {
             const data = await res.json();
             if (res.status === 200) {
                 localStorage.setItem("TaskUpToken", data.accessToken);
-                toast.success("Successful Login.");
+                toast.success(data.success);
                 setLoggedUser(data.id);
                 history.push("/");
             } else {

@@ -1,12 +1,14 @@
-import { useState } from "react";
-import { Redirect, Link } from "react-router-dom";
+import { useState, useContext } from "react";
+import { Link, useHistory } from "react-router-dom";
 import LogoImage from "../assets/images/TaskUp.png";
 import { toast } from "react-toastify";
+import { UserContext } from "../context/UserContext";
 
 const Register = () => {
+    const history = useHistory();
+    const { setLoggedUser } = useContext(UserContext);
     const [user, setUser] = useState({ name: "", email: "", password: "", institute: "" });
     const handleInput = (e) => setUser((prev) => ({ ...prev, [e.target.name]: e.target.value }));
-    const [registerStatus, setRegisterStatus] = useState(false);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -18,19 +20,18 @@ const Register = () => {
             });
             const data = await res.json();
             if (res.status === 201) {
-                toast.success("Successfully created account.");
-                setRegisterStatus(true);
+                localStorage.setItem("TaskUpToken", data.accessToken);
+                toast.success(data.success);
+                setLoggedUser(data.id);
+                history.push("/");
             } else {
                 toast.error(data.error);
             }
         } catch (err) {
-            window.alert("Something went wrong");
+            toast.error("Something went wrong");
         }
     };
 
-    if (registerStatus) {
-        return <Redirect to="/login" />;
-    }
     return (
         <div className="form-container">
             <main className="form-signin text-center">
@@ -53,7 +54,7 @@ const Register = () => {
                             onChange={handleInput}
                             required
                         />
-                        <label htmlFor="name">Full Name</label>
+                        <label htmlFor="name">Name</label>
                     </div>
                     <div className="form-floating">
                         <input
@@ -66,7 +67,7 @@ const Register = () => {
                             onChange={handleInput}
                             required
                         />
-                        <label htmlFor="institute">Institution/Company</label>
+                        <label htmlFor="institute">Institute</label>
                     </div>
                     <div className="form-floating">
                         <input

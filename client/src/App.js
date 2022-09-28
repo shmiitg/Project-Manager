@@ -9,7 +9,7 @@ import Project from "./pages/Project";
 import SearchResultsPage from "./pages/SearchResultsPage";
 import Profile from "./pages/Profile";
 import UpdateProfile from "./pages/UpdateProfile";
-import { ToastContainer } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import "../node_modules/react-grid-layout/css/styles.css";
 import "../node_modules/react-resizable/css/styles.css";
 import "react-toastify/dist/ReactToastify.css";
@@ -22,24 +22,28 @@ function App() {
 
     useEffect(() => {
         const fetchData = async () => {
-            const accessToken = localStorage.getItem("TaskUpToken");
-            if (!accessToken) {
-                setLoggedUser(null);
-                setLoading(false);
-                return;
-            }
-            const res = await fetch("/api/user", {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${accessToken}`,
-                },
-            });
-            const data = await res.json();
-            if (res.status === 200) {
-                setLoggedUser(data.id);
-            } else {
-                setLoggedUser(null);
+            try {
+                const accessToken = localStorage.getItem("TaskUpToken");
+                if (!accessToken) {
+                    setLoggedUser(null);
+                    setLoading(false);
+                    return;
+                }
+                const res = await fetch("/api/user", {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${accessToken}`,
+                    },
+                });
+                const data = await res.json();
+                if (res.status === 200) {
+                    setLoggedUser(data.id);
+                } else {
+                    setLoggedUser(null);
+                }
+            } catch (err) {
+                toast.error("Something went wrong");
             }
             setLoading(false);
         };

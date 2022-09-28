@@ -13,6 +13,7 @@ function Footer() {
                                     target="_blank"
                                     href="https://github.com/shmiitg"
                                     className="text-dark"
+                                    rel="noreferrer"
                                 >
                                     Github
                                 </a>
@@ -22,6 +23,7 @@ function Footer() {
                                     target="_blank"
                                     href="https://shm-portfolio.netlify.app/"
                                     className="text-dark"
+                                    rel="noreferrer"
                                 >
                                     Website
                                 </a>

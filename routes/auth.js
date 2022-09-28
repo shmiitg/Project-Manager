@@ -28,8 +28,12 @@ router.post("/register", async (req, res) => {
                 if (err) {
                     return res.status(500).json({ error: "Something went wrong" });
                 }
-                const accessToken = generateAccessToken(email);
-                return res.status(201).json({ accessToken: accessToken });
+                const accessToken = generateAccessToken(data.insertId);
+                return res.status(201).json({
+                    success: "Succesfully created account",
+                    accessToken: accessToken,
+                    id: data.insertId,
+                });
             });
         });
     } catch (err) {
@@ -50,7 +54,11 @@ router.post("/login", async (req, res) => {
                 res.status(404).json({ error: "User not found" });
             } else {
                 const accessToken = generateAccessToken(data[0].id);
-                res.status(200).json({ accessToken: accessToken, id: data[0].id });
+                res.status(200).json({
+                    success: "Logged in successfully",
+                    accessToken: accessToken,
+                    id: data[0].id,
+                });
             }
         });
     } catch (err) {

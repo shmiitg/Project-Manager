@@ -53,10 +53,10 @@ function SearchResultsPage(props) {
             const data = await res.json();
             if (res.status === 200) {
                 setProjectCount(data.count);
-                setIsDataLoading(false);
             } else {
                 toast.error(data.error);
             }
+            setIsDataLoading(false);
         };
         fetchProjectCount();
     }, [query]);
@@ -80,11 +80,11 @@ function SearchResultsPage(props) {
             const data = await res.json();
             if (res.status === 200) {
                 setProjectsData(data.projects);
-                setIsDataLoading(false);
                 setDataQueried(true);
             } else {
                 toast.error(data.error);
             }
+            setIsDataLoading(false);
         };
         fetchProjectData();
     }, [page, query]);

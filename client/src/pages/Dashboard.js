@@ -147,9 +147,13 @@ const Dashboard = () => {
                 },
             });
             const data = await res.json();
-            setProjectsData(data.projects);
+            if (res.status === 200) {
+                setProjectsData(data.projects);
+                setDataQueried(true);
+            } else {
+                toast.error(data.error);
+            }
             setIsDataLoading(false);
-            setDataQueried(true);
         };
         fetchProjectData();
     }, [page]);

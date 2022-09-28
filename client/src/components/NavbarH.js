@@ -1,5 +1,6 @@
 import React, { useContext } from "react";
 import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
 import LogoImage from "../assets/images/TinyLogo.png";
 import { UserContext } from "../context/UserContext";
 
@@ -9,6 +10,7 @@ const NavbarH = () => {
     const handleSignOut = async () => {
         localStorage.removeItem("TaskUpToken");
         setLoggedUser(null);
+        toast.success("Logged out successfully");
     };
 
     return (
@@ -40,6 +42,7 @@ const NavbarH = () => {
                                 </li>
                                 <li className="nav-item">
                                     <Link
+                                        to="/"
                                         onClick={handleSignOut}
                                         className="nav-link mb-0 border-0 bg-transparent"
                                     >
