@@ -31,7 +31,28 @@ router.get("/info", authenticateToken, (req, res) => {
             res.status(200).json({ user: user });
         });
     } catch (err) {
-        res.sendStatus(500);
+        res.status(500).json({ error: "Something went wrong" });
+    }
+});
+
+router.put("/update", authenticateToken, (req, res) => {
+    try {
+        const id = req.user.id;
+        const { name, email, institute } = req.body;
+        const findUser = "UPDATE user SET name = ?, email = ?, institute = ? WHERE id = ?";
+        db.query(findUser, [name, email, institute, id], (err, data) => {
+            if (err) {
+                return res
+                    .status(401)
+                    .json({ error: "Couldn't update the profile. Please try again." });
+            }
+            if (data.length === 0) {
+                return res.status(404).json({ error: "Couldn't find profile" });
+            }
+            res.status(200).json({ success: "Successfully updated profile!" });
+        });
+    } catch (err) {
+        res.status(500).json({ error: "Something went wrong" });
     }
 });
 

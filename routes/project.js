@@ -5,10 +5,10 @@ const db = require("../config/db");
 const authenticateToken = require("../middleware/verifyJWT");
 
 // get the project with given id
-router.get("/:id", authenticateToken, (req, res) => {
+router.get("/:projectId", authenticateToken, (req, res) => {
     try {
         const ownerId = req.user.id;
-        const projectId = req.params.id;
+        const projectId = req.params.projectId;
         const findProject = "SELECT * FROM project WHERE id = ? AND ownerId = ?";
         db.query(findProject, [projectId, ownerId], (err, data) => {
             if (err) {
@@ -45,7 +45,10 @@ router.post("/new", authenticateToken, (req, res) => {
                         .status(500)
                         .json({ error: "Couldn't create the new project. Please try again!" });
                 }
-                res.status(201).json({ project: data });
+                res.status(201).json({
+                    project: data,
+                    success: "Successfully added a new project!",
+                });
             });
         });
     } catch (err) {
@@ -111,7 +114,7 @@ router.get("/recents/:limit", authenticateToken, (req, res) => {
 });
 
 // get the count of total projects
-router.get("/count", authenticateToken, (req, res) => {
+router.get("/count/total", authenticateToken, (req, res) => {
     try {
         const id = req.user.id;
         const getProjectCount = "SELECT COUNT(*) AS cnt FROM project WHERE ownerId = ?";
@@ -135,8 +138,46 @@ router.get("/page/:pageNo/:limit", authenticateToken, (req, res) => {
         const getProjects = "SELECT * FROM project WHERE ownerId = ? LIMIT ? OFFSET ?";
         db.query(getProjects, [id, limit, (pageNo - 1) * limit], (err, data) => {
             if (err) {
-                console.log(err);
                 return res.status(401).json({ error: "Something went wrong" });
+            }
+            res.status(200).json({ projects: data });
+        });
+    } catch (err) {
+        res.status(500).json({ error: "Something went wrong" });
+    }
+});
+
+// get the count of projects with specific query
+router.get("/query/count/:query", authenticateToken, (req, res) => {
+    try {
+        const ownerId = req.user.id;
+        const query = req.params.query;
+        const getQueryProjectsCount = `SELECT COUNT(*) AS cnt FROM project WHERE ownerId = ? AND name LIKE '%${query}%' `;
+        db.query(getQueryProjectsCount, [ownerId], (err, data) => {
+            if (err) {
+                return res.status(401).json({ error: "Couldn't fetch projects. Please refresh!" });
+            }
+            if (data.length === 0) {
+                return res.status(404).json({ error: "No projects found" });
+            }
+            res.status(200).json({ count: data[0].cnt });
+        });
+    } catch (err) {
+        res.status(500).json({ error: "Something went wrong" });
+    }
+});
+
+// get the projects with specific query
+router.get("/query/:query/page/:pageNo/:limit", authenticateToken, (req, res) => {
+    try {
+        const ownerId = req.user.id;
+        const query = req.params.query;
+        const pageNo = Number(req.params.pageNo);
+        const limit = Number(req.params.limit);
+        const getQueryProjectsCount = `SELECT * FROM project WHERE ownerId = ? AND name LIKE '%${query}%' LIMIT ? OFFSET ?`;
+        db.query(getQueryProjectsCount, [ownerId, limit, (pageNo - 1) * limit], (err, data) => {
+            if (err) {
+                return res.status(401).json({ error: "Couldn't fetch projects. Please refresh!" });
             }
             res.status(200).json({ projects: data });
         });
