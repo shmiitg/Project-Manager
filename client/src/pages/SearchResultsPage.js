@@ -170,19 +170,23 @@ function SearchResultsPage(props) {
                                 );
                             })}
                             {(databaseQueried && userProjects.length) === 0 && (
-                                <h3> Results not found.</h3>
+                                <h3> OOPS! No projects found</h3>
                             )}
                         </div>
-                        <div className="d-flex justify-content-center mt-2">
-                            <div className={classes.root}>
-                                <Typography>Page: {page}</Typography>
-                                <Pagination
-                                    count={Math.floor(projectCount / 5) + 1}
-                                    page={page}
-                                    onChange={handlePaginationChange}
-                                />
+                        {userProjects.length ? (
+                            <div className="d-flex justify-content-center mt-2">
+                                <div className={classes.root}>
+                                    <Typography>Page: {page}</Typography>
+                                    <Pagination
+                                        count={Math.floor(projectCount / 5) + 1}
+                                        page={page}
+                                        onChange={handlePaginationChange}
+                                    />
+                                </div>
                             </div>
-                        </div>
+                        ) : (
+                            <></>
+                        )}
                         <Footer />
                     </main>
                 </div>

@@ -35,6 +35,9 @@ const Dashboard = () => {
     const classes = useStyles();
     const [page, setPage] = useState(1);
     const handlePaginationChange = (event, value) => {
+        if (page === value) {
+            return;
+        }
         setProjectsData([]);
         setIsDataLoading(true);
         setPage(value);
@@ -364,16 +367,20 @@ const Dashboard = () => {
                                 </div>
                             )}
                         </div>
-                        <div className="d-flex justify-content-center mt-3">
-                            <div className={classes.root}>
-                                <Typography align="center">Page: {page}</Typography>
-                                <Pagination
-                                    count={Math.ceil(projectCount / 5)}
-                                    page={page}
-                                    onChange={handlePaginationChange}
-                                />
+                        {userProjects.length ? (
+                            <div className="d-flex justify-content-center mt-3">
+                                <div className={classes.root}>
+                                    <Typography align="center">Page: {page}</Typography>
+                                    <Pagination
+                                        count={Math.ceil(projectCount / 5)}
+                                        page={page}
+                                        onChange={handlePaginationChange}
+                                    />
+                                </div>
                             </div>
-                        </div>
+                        ) : (
+                            <></>
+                        )}
                         <Footer />
                     </main>
                 </div>
