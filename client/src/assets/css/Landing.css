@@ -6,12 +6,12 @@
 
 .linkText {
     text-decoration: none;
-    color: rgb(116, 112, 112);
+    color: #747070;
     margin-bottom: 10px;
 }
 
 .gradient {
-    background: rgb(0, 82, 82);
+    background: #005252;
 }
 
 .signUpBtn {

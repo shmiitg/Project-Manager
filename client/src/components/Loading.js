@@ -1,10 +1,10 @@
 import React from "react";
+import "../assets/css/Loading.css";
 
 const Loading = () => {
     return (
-        <div>
-            Loading
-            <h1>Loader...</h1>
+        <div className="loading-container">
+            <div className="shapes-4"></div>
         </div>
     );
 };
